@@ -224,6 +224,7 @@ const MarketplaceScreen = () => {
 };
 
 // Game Screen (2048)
+
 const GameScreen = () => {
   const [board, setBoard] = useState(
     Array(4)
@@ -364,7 +365,15 @@ const GameScreen = () => {
       <GestureDetector gesture={gesture}>
         <View style={styles.gameContainer}>
           <Text style={styles.sectionTitle}>2048 Game</Text>
-          <Text style={styles.scoreText}>Score: {score}</Text>
+          <View style={styles.gameHeader}>
+            <Text style={styles.scoreText}>Score: {score}</Text>
+            <TouchableOpacity
+              style={styles.newGameButton}
+              onPress={initializeGame}
+            >
+              <Text style={styles.newGameButtonText}>New Game</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.gameBoard}>
             {board.map((row, rowIndex) => (
               <View key={rowIndex} style={styles.gameRow}>
@@ -453,10 +462,9 @@ const App = () => {
 };
 
 // Styles
-const styles = StyleSheet.create({
-  // Existing styles from previous implementation
 
-  // 2048 Game Specific Styles
+const styles = StyleSheet.create({
+  // Game-related styles
   gameContainer: {
     flex: 1,
     alignItems: "center",
@@ -470,15 +478,6 @@ const styles = StyleSheet.create({
   gameRow: {
     flexDirection: "row",
   },
-  gameCell: {
-    width: 75,
-    height: 75,
-    backgroundColor: "#CCC",
-    margin: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
   gameCell: {
     width: 75,
     height: 75,
@@ -496,7 +495,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
   },
-  // Tile color styles for different values
+  // Tile color styles
   gameCell2: { backgroundColor: "#E0F7FA" },
   gameCell4: { backgroundColor: "#B2EBF2" },
   gameCell8: { backgroundColor: "#80DEEA" },
@@ -523,6 +522,32 @@ const styles = StyleSheet.create({
     backgroundColor: "#004D40",
     color: "white",
   },
+  gameHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  scoreText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  newGameButton: {
+    backgroundColor: "#4A90E2",
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 5,
+  },
+  newGameButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+
+  // Container and general styles
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
@@ -552,136 +577,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  guestButton: {
-    backgroundColor: "white",
-    padding: 15,
-    borderRadius: 5,
-    marginHorizontal: 20,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#4A90E2",
-    marginTop: 10,
-  },
-  guestButtonText: {
-    color: "#4A90E2",
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 15,
-    backgroundColor: "white",
-  },
-  profileSection: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  username: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  pointsSection: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  pointsText: {
-    marginRight: 10,
-  },
-  lotteryButton: {
-    backgroundColor: "#4A90E2",
-    padding: 5,
-    borderRadius: 5,
-  },
-  lotteryButtonText: {
-    color: "white",
-    fontSize: 12,
-  },
-  sectionContainer: {
-    marginVertical: 15,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    paddingHorizontal: 15,
-    marginBottom: 10,
-  },
-  quickAccessScroll: {
-    paddingHorizontal: 10,
-  },
-  quickAccessItem: {
-    alignItems: "center",
-    marginRight: 15,
-  },
-  quickAccessIconContainer: {
-    backgroundColor: "#E6F2FF",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 5,
-  },
-  quickAccessText: {
-    fontSize: 12,
-  },
-  tipCard: {
-    backgroundColor: "white",
-    padding: 15,
-    marginHorizontal: 15,
-    marginBottom: 10,
-    borderRadius: 10,
-  },
-  tipTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  tipDescription: {
-    color: "gray",
-  },
-  productGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-  },
-  productCard: {
-    width: Dimensions.get("window").width / 2 - 25,
-    backgroundColor: "white",
-    padding: 15,
-    alignItems: "center",
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-  productImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  productName: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  productPrice: {
-    color: "#4A90E2",
-    marginVertical: 5,
-  },
-  buyButton: {
-    backgroundColor: "#4A90E2",
-    padding: 10,
-    borderRadius: 5,
-    width: "100%",
-    alignItems: "center",
-  },
-  buyButtonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
 
-  // Styles update
-  // Existing styles remain the same, with updates to login-related styles
+  // Login-related styles
   loginContainer: {
     flex: 1,
     backgroundColor: "#F5F5F5",
@@ -723,6 +620,99 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+
+  // Header and profile styles
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 15,
+    backgroundColor: "white",
+  },
+  profileSection: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  username: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+
+  // Points and lottery styles
+  pointsSection: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  pointsText: {
+    marginRight: 10,
+  },
+  lotteryButton: {
+    backgroundColor: "#4A90E2",
+    padding: 5,
+    borderRadius: 5,
+  },
+  lotteryButtonText: {
+    color: "white",
+    fontSize: 12,
+  },
+
+  // Section and content styles
+  sectionContainer: {
+    marginVertical: 15,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    paddingHorizontal: 15,
+    marginBottom: 10,
+  },
+
+  // Product and marketplace styles
+  productGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+  },
+  productCard: {
+    width: Dimensions.get("window").width / 2 - 25,
+    backgroundColor: "white",
+    padding: 15,
+    alignItems: "center",
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  productImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  productName: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  productPrice: {
+    color: "#4A90E2",
+    marginVertical: 5,
+  },
+  buyButton: {
+    backgroundColor: "#4A90E2",
+    padding: 10,
+    borderRadius: 5,
+    width: "100%",
+    alignItems: "center",
+  },
+  buyButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+  // Guest button styles
   guestButton: {
     backgroundColor: "#F0F4F8",
     padding: 15,
@@ -735,5 +725,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
 export default App;
