@@ -23,6 +23,8 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { FlatList, Alert } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 // Authentication Screen
 const LoginScreen = ({ navigation }) => {
@@ -280,6 +282,200 @@ const HomeScreen = () => {
           <Text style={styles.coachPrice}>From $29.99/mo</Text>
         </TouchableOpacity>
       </ScrollView>
+    </SafeAreaView>
+  );
+};
+const SocialScreen = () => {
+  const [posts, setPosts] = useState([
+    {
+      id: "1",
+      user: {
+        id: "1",
+        name: "Sarah Wilson",
+        avatar: "https://via.placeholder.com/50",
+        isFollowing: false,
+      },
+      content: {
+        type: "image",
+        uri: "https://via.placeholder.com/400",
+      },
+      caption:
+        "Morning meditation and yoga session! 🧘‍♀️ #Wellness #MorningRoutine",
+      likes: 124,
+      comments: 18,
+      timestamp: "2 hours ago",
+    },
+    {
+      id: "2",
+      user: {
+        id: "2",
+        name: "Mike Brooks",
+        avatar: "https://via.placeholder.com/50",
+        isFollowing: true,
+      },
+      content: {
+        type: "image",
+        uri: "https://via.placeholder.com/400",
+      },
+      caption: "New personal record in today's workout! 💪 #FitnessGoals",
+      likes: 89,
+      comments: 12,
+      timestamp: "4 hours ago",
+    },
+  ]);
+
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFollowUser = (userId) => {
+    setPosts(
+      posts.map((post) => {
+        if (post.user.id === userId) {
+          return {
+            ...post,
+            user: {
+              ...post.user,
+              isFollowing: !post.user.isFollowing,
+            },
+          };
+        }
+        return post;
+      })
+    );
+  };
+
+  const handleLikePost = (postId) => {
+    setPosts(
+      posts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            likes: post.likes + (post.isLiked ? -1 : 1),
+            isLiked: !post.isLiked,
+          };
+        }
+        return post;
+      })
+    );
+  };
+
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setIsUploading(true);
+        // Simulate upload delay
+        setTimeout(() => {
+          const newPost = {
+            id: String(posts.length + 1),
+            user: {
+              id: "current_user",
+              name: "You",
+              avatar: "https://via.placeholder.com/50",
+              isFollowing: false,
+            },
+            content: {
+              type: "image",
+              uri: result.assets[0].uri,
+            },
+            caption: "My new wellness journey post! #ZenHub",
+            likes: 0,
+            comments: 0,
+            timestamp: "Just now",
+          };
+          setPosts([newPost, ...posts]);
+          setIsUploading(false);
+        }, 1500);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to upload image");
+      setIsUploading(false);
+    }
+  };
+
+  const renderPost = ({ item }) => (
+    <View style={styles.postContainer}>
+      <View style={styles.postHeader}>
+        <View style={styles.userInfo}>
+          <Image source={{ uri: item.user.avatar }} style={styles.postAvatar} />
+          <Text style={styles.userName}>{item.user.name}</Text>
+        </View>
+        <TouchableOpacity
+          style={[
+            styles.followButton,
+            item.user.isFollowing && styles.followingButton,
+          ]}
+          onPress={() => handleFollowUser(item.user.id)}
+        >
+          <Text
+            style={[
+              styles.followButtonText,
+              item.user.isFollowing && styles.followingButtonText,
+            ]}
+          >
+            {item.user.isFollowing ? "Following" : "Follow"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <Image source={{ uri: item.content.uri }} style={styles.postImage} />
+
+      <View style={styles.postActions}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => handleLikePost(item.id)}
+        >
+          <Ionicons
+            name={item.isLiked ? "heart" : "heart-outline"}
+            size={24}
+            color={item.isLiked ? "#FF6B6B" : "#333"}
+          />
+          <Text style={styles.actionText}>{item.likes}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.actionButton}>
+          <Ionicons name="chatbubble-outline" size={24} color="#333" />
+          <Text style={styles.actionText}>{item.comments}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.actionButton}>
+          <Ionicons name="share-outline" size={24} color="#333" />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.postContent}>
+        <Text style={styles.postCaption}>
+          <Text style={styles.userName}>{item.user.name}</Text> {item.caption}
+        </Text>
+        <Text style={styles.timestamp}>{item.timestamp}</Text>
+      </View>
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.socialHeader}>
+        <Text style={styles.socialTitle}>Wellness Feed</Text>
+        <TouchableOpacity
+          style={styles.createPostButton}
+          onPress={pickImage}
+          disabled={isUploading}
+        >
+          <Ionicons name="camera" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={posts}
+        renderItem={renderPost}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 };
@@ -554,6 +750,10 @@ const App = () => {
                       return (
                         <FontAwesome5 name="store" size={size} color={color} />
                       );
+                    case "Social":
+                      return (
+                        <Ionicons name="people" size={size} color={color} />
+                      );
                     case "Games":
                       return (
                         <Ionicons
@@ -576,6 +776,11 @@ const App = () => {
                 options={{ title: "Home" }}
               />
               <Tab.Screen
+                name="Social"
+                component={SocialScreen}
+                options={{ title: "Social" }}
+              />
+              <Tab.Screen
                 name="Marketplace"
                 component={MarketplaceScreen}
                 options={{ title: "Market" }}
@@ -594,8 +799,99 @@ const App = () => {
 };
 
 // Styles
-
 const styles = StyleSheet.create({
+  // Social Screen Styles
+  socialHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 15,
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+  },
+  socialTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  createPostButton: {
+    backgroundColor: "#4A90E2",
+    padding: 10,
+    borderRadius: 25,
+  },
+  postContainer: {
+    backgroundColor: "white",
+    marginBottom: 10,
+  },
+  postHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+  },
+  userInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  postAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  userName: {
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  followButton: {
+    backgroundColor: "#4A90E2",
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  followingButton: {
+    backgroundColor: "#E0E0E0",
+  },
+  followButtonText: {
+    color: "white",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  followingButtonText: {
+    color: "#333",
+  },
+  postImage: {
+    width: "100%",
+    height: 400,
+    resizeMode: "cover",
+  },
+  postActions: {
+    flexDirection: "row",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+  },
+  actionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 20,
+  },
+  actionText: {
+    marginLeft: 5,
+    color: "#333",
+  },
+  postContent: {
+    padding: 10,
+  },
+  postCaption: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  timestamp: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 5,
+  },
   // Game-related styles
   gameContainer: {
     flex: 1,
@@ -636,23 +932,18 @@ const styles = StyleSheet.create({
   gameCell64: { backgroundColor: "#00BCD4" },
   gameCell128: {
     backgroundColor: "#00ACC1",
-    color: "white",
   },
   gameCell256: {
     backgroundColor: "#0097A7",
-    color: "white",
   },
   gameCell512: {
     backgroundColor: "#00838F",
-    color: "white",
   },
   gameCell1024: {
     backgroundColor: "#006064",
-    color: "white",
   },
   gameCell2048: {
     backgroundColor: "#004D40",
-    color: "white",
   },
   gameHeader: {
     flexDirection: "row",
@@ -678,7 +969,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
   },
-
   // Container and general styles
   container: {
     flex: 1,
@@ -709,7 +999,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-
   // Login-related styles
   loginContainer: {
     flex: 1,
@@ -752,7 +1041,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-
   // Header and profile styles
   premiumBanner: {
     backgroundColor: "#4A90E2",
@@ -908,7 +1196,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-
   // Points and lottery styles
   pointsSection: {
     flexDirection: "row",
@@ -926,7 +1213,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
   },
-
   // Section and content styles
   sectionContainer: {
     marginVertical: 15,
@@ -937,7 +1223,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 10,
   },
-
   // Product and marketplace styles
   productGrid: {
     flexDirection: "row",
@@ -977,7 +1262,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-
   // Guest button styles
   guestButton: {
     backgroundColor: "#F0F4F8",
