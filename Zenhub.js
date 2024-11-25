@@ -724,11 +724,375 @@ const GameScreen = () => {
     </GestureHandlerRootView>
   );
 };
-// Navigation Setup
+
+/// Movie Screen Component
+const MovieScreen = () => {
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [selectedShowtime, setSelectedShowtime] = useState(null);
+
+  const movies = [
+    {
+      id: 1,
+      title: "Inception Returns",
+      image: "https://via.placeholder.com/300",
+      rating: "4.5",
+      duration: "2h 30min",
+      showtimes: ["10:00 AM", "2:00 PM", "6:00 PM", "9:00 PM"],
+      price: 12.99,
+    },
+    {
+      id: 2,
+      title: "The Matrix Revival",
+      image: "https://via.placeholder.com/300",
+      rating: "4.8",
+      duration: "2h 15min",
+      showtimes: ["11:00 AM", "3:00 PM", "7:00 PM", "10:00 PM"],
+      price: 14.99,
+    },
+  ];
+
+  const renderSeats = () => {
+    const rows = ["A", "B", "C", "D", "E", "F"];
+    const seatsPerRow = 8;
+
+    return (
+      <View style={styles.seatingContainer}>
+        <Text style={styles.screenText}>SCREEN</Text>
+        <View style={styles.screen} />
+        {rows.map((row) => (
+          <View key={row} style={styles.seatRow}>
+            <Text style={styles.rowLabel}>{row}</Text>
+            {[...Array(seatsPerRow)].map((_, index) => {
+              const seatId = `${row}${index + 1}`;
+              const isSelected = selectedSeats.includes(seatId);
+              return (
+                <TouchableOpacity
+                  key={seatId}
+                  style={[styles.seat, isSelected && styles.selectedSeat]}
+                  onPress={() => {
+                    if (isSelected) {
+                      setSelectedSeats(
+                        selectedSeats.filter((id) => id !== seatId)
+                      );
+                    } else {
+                      setSelectedSeats([...selectedSeats, seatId]);
+                    }
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.seatText,
+                      isSelected && styles.selectedSeatText,
+                    ]}
+                  >
+                    {index + 1}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        ))}
+      </View>
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        {!selectedMovie ? (
+          <View style={styles.movieListContainer}>
+            <Text style={styles.sectionTitle}>Now Showing</Text>
+            {movies.map((movie) => (
+              <TouchableOpacity
+                key={movie.id}
+                style={styles.movieCard}
+                onPress={() => setSelectedMovie(movie)}
+              >
+                <Image
+                  source={{ uri: movie.image }}
+                  style={styles.movieImage}
+                />
+                <View style={styles.movieInfo}>
+                  <Text style={styles.movieTitle}>{movie.title}</Text>
+                  <View style={styles.movieMetadata}>
+                    <Text style={styles.movieRating}>⭐ {movie.rating}</Text>
+                    <Text style={styles.movieDuration}>{movie.duration}</Text>
+                  </View>
+                  <Text style={styles.moviePrice}>${movie.price}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ) : (
+          <View style={styles.bookingContainer}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => {
+                setSelectedMovie(null);
+                setSelectedSeats([]);
+                setSelectedShowtime(null);
+              }}
+            >
+              <Text style={styles.backButtonText}>← Back to Movies</Text>
+            </TouchableOpacity>
+
+            <Image
+              source={{ uri: selectedMovie.image }}
+              style={styles.selectedMovieImage}
+            />
+
+            <Text style={styles.selectedMovieTitle}>{selectedMovie.title}</Text>
+
+            <View style={styles.showtimeContainer}>
+              <Text style={styles.showtimeTitle}>Select Showtime</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {selectedMovie.showtimes.map((time, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.showtimeButton,
+                      selectedShowtime === time && styles.selectedShowtime,
+                    ]}
+                    onPress={() => setSelectedShowtime(time)}
+                  >
+                    <Text
+                      style={[
+                        styles.showtimeText,
+                        selectedShowtime === time &&
+                          styles.selectedShowtimeText,
+                      ]}
+                    >
+                      {time}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+
+            {selectedShowtime && (
+              <>
+                {renderSeats()}
+
+                <View style={styles.bookingSummary}>
+                  <Text style={styles.summaryTitle}>Booking Summary</Text>
+                  <Text>Selected Seats: {selectedSeats.join(", ")}</Text>
+                  <Text>
+                    Total: $
+                    {(selectedSeats.length * selectedMovie.price).toFixed(2)}
+                  </Text>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.bookButton,
+                      selectedSeats.length === 0 && styles.disabledButton,
+                    ]}
+                    disabled={selectedSeats.length === 0}
+                    onPress={() =>
+                      Alert.alert("Success!", "Tickets booked successfully!")
+                    }
+                  >
+                    <Text style={styles.bookButtonText}>Book Tickets</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+// Tourism Screen Component
+const TourismScreen = () => {
+  const [selectedDestination, setSelectedDestination] = useState(null);
+  const [checkIn, setCheckIn] = useState(new Date());
+  const [checkOut, setCheckOut] = useState(new Date());
+  const [guests, setGuests] = useState(2);
+
+  const destinations = [
+    {
+      id: 1,
+      name: "Bali Paradise",
+      image: "https://via.placeholder.com/300",
+      rating: 4.8,
+      price: 199,
+      description: "Experience the magic of Bali with our luxury resorts",
+      amenities: ["Pool", "Spa", "Beach Access", "Restaurant"],
+      resorts: [
+        {
+          id: 101,
+          name: "Ocean View Resort",
+          price: 299,
+          rating: 4.9,
+          image: "https://via.placeholder.com/300",
+        },
+        {
+          id: 102,
+          name: "Tropical Paradise Resort",
+          price: 249,
+          rating: 4.7,
+          image: "https://via.placeholder.com/300",
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: "Maldives Retreat",
+      image: "https://via.placeholder.com/300",
+      rating: 4.9,
+      price: 299,
+      description: "Discover crystal clear waters and luxury overwater villas",
+      amenities: ["Private Beach", "Diving", "Spa", "Water Sports"],
+      resorts: [
+        {
+          id: 201,
+          name: "Water Villa Resort",
+          price: 399,
+          rating: 5.0,
+          image: "https://via.placeholder.com/300",
+        },
+        {
+          id: 202,
+          name: "Island Paradise Resort",
+          price: 349,
+          rating: 4.8,
+          image: "https://via.placeholder.com/300",
+        },
+      ],
+    },
+  ];
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        {!selectedDestination ? (
+          <View style={styles.destinationListContainer}>
+            <Text style={styles.sectionTitle}>Popular Destinations</Text>
+            {destinations.map((destination) => (
+              <TouchableOpacity
+                key={destination.id}
+                style={styles.destinationCard}
+                onPress={() => setSelectedDestination(destination)}
+              >
+                <Image
+                  source={{ uri: destination.image }}
+                  style={styles.destinationImage}
+                />
+                <View style={styles.destinationInfo}>
+                  <Text style={styles.destinationName}>{destination.name}</Text>
+                  <View style={styles.destinationMetadata}>
+                    <Text style={styles.destinationRating}>
+                      ⭐ {destination.rating}
+                    </Text>
+                    <Text style={styles.destinationPrice}>
+                      From ${destination.price}/night
+                    </Text>
+                  </View>
+                  <Text style={styles.destinationDescription}>
+                    {destination.description}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ) : (
+          <View style={styles.resortContainer}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => setSelectedDestination(null)}
+            >
+              <Text style={styles.backButtonText}>← Back to Destinations</Text>
+            </TouchableOpacity>
+
+            <Image
+              source={{ uri: selectedDestination.image }}
+              style={styles.selectedDestinationImage}
+            />
+
+            <Text style={styles.selectedDestinationName}>
+              {selectedDestination.name}
+            </Text>
+
+            <View style={styles.bookingForm}>
+              <Text style={styles.formTitle}>Book Your Stay</Text>
+
+              <View style={styles.dateContainer}>
+                <TouchableOpacity
+                  style={styles.dateInput}
+                  onPress={() => {
+                    /* Add date picker logic */
+                  }}
+                >
+                  <Text>Check-in: {checkIn.toDateString()}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.dateInput}
+                  onPress={() => {
+                    /* Add date picker logic */
+                  }}
+                >
+                  <Text>Check-out: {checkOut.toDateString()}</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.guestsContainer}>
+                <Text style={styles.guestsLabel}>Guests:</Text>
+                <View style={styles.guestsControls}>
+                  <TouchableOpacity
+                    style={styles.guestButton}
+                    onPress={() => setGuests(Math.max(1, guests - 1))}
+                  >
+                    <Text style={styles.guestButtonText}>-</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.guestsCount}>{guests}</Text>
+                  <TouchableOpacity
+                    style={styles.guestButton}
+                    onPress={() => setGuests(guests + 1)}
+                  >
+                    <Text style={styles.guestButtonText}>+</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
+            <Text style={styles.resortsTitle}>Available Resorts</Text>
+            {selectedDestination.resorts.map((resort) => (
+              <View key={resort.id} style={styles.resortCard}>
+                <Image
+                  source={{ uri: resort.image }}
+                  style={styles.resortImage}
+                />
+                <View style={styles.resortInfo}>
+                  <Text style={styles.resortName}>{resort.name}</Text>
+                  <Text style={styles.resortRating}>⭐ {resort.rating}</Text>
+                  <Text style={styles.resortPrice}>${resort.price}/night</Text>
+                  <TouchableOpacity
+                    style={styles.bookButton}
+                    onPress={() =>
+                      Alert.alert("Success!", "Resort booked successfully!")
+                    }
+                  >
+                    <Text style={styles.bookButtonText}>Book Now</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+// Update your App.js to include the new screens
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 // Main App Component
+// Update your App.js to include the new screens
 const App = () => {
   return (
     <NavigationContainer>
@@ -746,9 +1110,11 @@ const App = () => {
                   switch (route.name) {
                     case "HomeTab":
                       return <Ionicons name="home" size={size} color={color} />;
-                    case "Marketplace":
+                    case "Movies":
+                      return <Ionicons name="film" size={size} color={color} />;
+                    case "Tourism":
                       return (
-                        <FontAwesome5 name="store" size={size} color={color} />
+                        <Ionicons name="airplane" size={size} color={color} />
                       );
                     case "Social":
                       return (
@@ -776,14 +1142,19 @@ const App = () => {
                 options={{ title: "Home" }}
               />
               <Tab.Screen
+                name="Movies"
+                component={MovieScreen}
+                options={{ title: "Movies" }}
+              />
+              <Tab.Screen
+                name="Tourism"
+                component={TourismScreen}
+                options={{ title: "Tourism" }}
+              />
+              <Tab.Screen
                 name="Social"
                 component={SocialScreen}
                 options={{ title: "Social" }}
-              />
-              <Tab.Screen
-                name="Marketplace"
-                component={MarketplaceScreen}
-                options={{ title: "Market" }}
               />
               <Tab.Screen
                 name="Games"
@@ -799,7 +1170,237 @@ const App = () => {
 };
 
 // Styles
+
 const styles = StyleSheet.create({
+  // Movie Screen Styles
+  movieListContainer: {
+    padding: 15,
+  },
+  movieCard: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    marginBottom: 15,
+    overflow: "hidden",
+  },
+  movieImage: {
+    width: "100%",
+    height: 200,
+  },
+  movieInfo: {
+    padding: 15,
+  },
+  movieTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  movieMetadata: {
+    flexDirection: "row",
+    marginTop: 5,
+  },
+  movieRating: {
+    marginRight: 10,
+  },
+  seatingContainer: {
+    padding: 15,
+    alignItems: "center",
+  },
+  screen: {
+    width: "80%",
+    height: 5,
+    backgroundColor: "#DDD",
+    marginBottom: 20,
+  },
+  screenText: {
+    marginBottom: 10,
+    color: "#666",
+  },
+  seatRow: {
+    flexDirection: "row",
+    marginBottom: 10,
+    alignItems: "center",
+  },
+  rowLabel: {
+    width: 20,
+    marginRight: 10,
+  },
+  seat: {
+    width: 30,
+    height: 30,
+    margin: 3,
+    borderRadius: 5,
+    backgroundColor: "#E0E0E0",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  selectedSeat: {
+    backgroundColor: "#4A90E2",
+  },
+  seatText: {
+    fontSize: 12,
+  },
+  selectedSeatText: {
+    color: "white",
+  },
+
+  // Tourism Screen Styles
+  destinationListContainer: {
+    padding: 15,
+  },
+  destinationCard: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    marginBottom: 15,
+    overflow: "hidden",
+  },
+  destinationImage: {
+    width: "100%",
+    height: 200,
+  },
+  destinationInfo: {
+    padding: 15,
+  },
+  destinationName: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  destinationMetadata: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 5,
+  },
+  bookingForm: {
+    backgroundColor: "white",
+    padding: 15,
+    margin: 15,
+    borderRadius: 10,
+  },
+  dateContainer: {
+    marginBottom: 15,
+  },
+  dateInput: {
+    borderWidth: 1,
+    borderColor: "#DDD",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  guestsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  guestsControls: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  guestButton: {
+    width: 30,
+    height: 30,
+    backgroundColor: "#4A90E2",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 10,
+  },
+  guestButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  guestsCount: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  resortCard: {
+    backgroundColor: "white",
+    margin: 15,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  resortImage: {
+    width: "100%",
+    height: 200,
+  },
+  resortInfo: {
+    padding: 15,
+  },
+  resortName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  resortPrice: {
+    color: "#4A90E2",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  backButton: {
+    padding: 15,
+  },
+  backButtonText: {
+    color: "#4A90E2",
+    fontSize: 16,
+  },
+  selectedMovieImage: {
+    width: "100%",
+    height: 250,
+  },
+  selectedMovieTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    padding: 15,
+  },
+  showtimeContainer: {
+    padding: 15,
+  },
+  showtimeTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  showtimeButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: "#F0F0F0",
+    marginRight: 10,
+  },
+  selectedShowtime: {
+    backgroundColor: "#4A90E2",
+  },
+  showtimeText: {
+    color: "#333",
+  },
+  selectedShowtimeText: {
+    color: "white",
+  },
+  bookingSummary: {
+    padding: 15,
+    backgroundColor: "white",
+    margin: 15,
+    borderRadius: 10,
+  },
+  summaryTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  bookButton: {
+    backgroundColor: "#4A90E2",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 15,
+  },
+  disabledButton: {
+    backgroundColor: "#CCCCCC",
+  },
+  bookButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
   // Social Screen Styles
   socialHeader: {
     flexDirection: "row",
