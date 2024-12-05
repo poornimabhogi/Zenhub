@@ -25,7 +25,16 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { FlatList, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-
+// In your React Native component
+const fetchData = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/your-endpoint");
+    const data = await response.json();
+    // Handle data
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
 // Authentication Screen
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
