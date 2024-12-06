@@ -27,6 +27,7 @@ import { FlatList, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 import styles from "./styles";
+import MarketplaceScreen from "./MarketplaceScreen";
 // In your React Native component
 
 // Authentication Screen
@@ -392,80 +393,10 @@ const SocialScreen = () => {
   );
 };
 // Marketplace Screen
-const MarketplaceScreen = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
-  const products = [
-    {
-      name: "Meditation Cushion",
-      price: 29.99,
-      image: "https://via.placeholder.com/150",
-      category: "Meditation",
-    },
-    {
-      name: "Yoga Mat",
-      price: 49.99,
-      image: "https://via.placeholder.com/150",
-      category: "Fitness",
-    },
-    {
-      name: "Aromatherapy Set",
-      price: 39.99,
-      image: "https://via.placeholder.com/150",
-      category: "Wellness",
-    },
-  ];
-
-  const categories = ["All", "Meditation", "Fitness", "Wellness"];
-
-  const filteredProducts =
-    selectedCategory === "All"
-      ? products
-      : products.filter((p) => p.category === selectedCategory);
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.sectionTitle}>Wellness Marketplace</Text>
-
-      <ScrollView horizontal style={styles.categoryScroll}>
-        {categories.map((category, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.categoryButton,
-              selectedCategory === category && styles.selectedCategory,
-            ]}
-            onPress={() => setSelectedCategory(category)}
-          >
-            <Text style={styles.categoryButtonText}>{category}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      <ScrollView>
-        <View style={styles.productGrid}>
-          {filteredProducts.map((product, index) => (
-            <TouchableOpacity key={index} style={styles.productCard}>
-              <Image
-                source={{ uri: product.image }}
-                style={styles.productImage}
-              />
-              <Text style={styles.productName}>{product.name}</Text>
-              <Text style={styles.productPrice}>${product.price}</Text>
-              <TouchableOpacity style={styles.buyButton}>
-                <Text style={styles.buyButtonText}>Add to Cart</Text>
-              </TouchableOpacity>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
 
 // Game Screen (2048)
 
-const GameScreen = () => {
+const GamesScreen = () => {
   const [board, setBoard] = useState(
     Array(4)
       .fill()
@@ -638,7 +569,7 @@ const GameScreen = () => {
 };
 
 /// Movie Screen Component
-const MovieScreen = () => {
+const MoviesScreen = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [selectedShowtime, setSelectedShowtime] = useState(null);
@@ -1207,11 +1138,89 @@ const HealthScreen = () => {
 
 // Update your App.js to include the new screens
 
-const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+// App.j
 
-// Main App Component
-// Update your App.js to include the new screens
+// Import screens from screens folder
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const TabNavigator = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          const icons = {
+            HomeTab: "person",
+            Social: "people",
+            MarketplaceScreen: "storefront",
+            Games: "game-controller",
+            Movies: "film",
+            Tourism: "airplane",
+            Health: "fitness",
+          };
+          return (
+            <Ionicons name={icons[route.name]} size={size} color={color} />
+          );
+        },
+        tabBarActiveTintColor: "#4A90E2",
+        tabBarInactiveTintColor: "gray",
+      })}
+    >
+      <Tab.Screen
+        name="HomeTab"
+        component={HomeScreen}
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Social"
+        component={SocialScreen}
+        options={{ title: "Social" }}
+      />
+      <Tab.Screen
+        name="MarketplaceScreen"
+        component={MarketplaceScreen}
+        options={{
+          title: "Marketplace",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="storefront" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Movies"
+        component={MoviesScreen}
+        options={{ title: "Movies" }}
+      />
+      <Tab.Screen
+        name="Tourism"
+        component={TourismScreen}
+        options={{ title: "Tourism" }}
+      />
+      <Tab.Screen
+        name="Games"
+        component={GamesScreen}
+        options={{ title: "Games" }}
+      />
+      <Tab.Screen
+        name="Health"
+        component={HealthScreen}
+        options={{
+          title: "Health",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="fitness" size={size} color={color} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
 const App = () => {
   return (
     <NavigationContainer>
@@ -1221,98 +1230,16 @@ const App = () => {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Home" options={{ headerShown: false }}>
-          {() => (
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ color, size }) => {
-                  switch (route.name) {
-                    case "HomeTab":
-                      return <Ionicons name="home" size={size} color={color} />;
-
-                    case "Social":
-                      return (
-                        <Ionicons name="people" size={size} color={color} />
-                      );
-                    case "Games":
-                      return (
-                        <Ionicons
-                          name="game-controller"
-                          size={size}
-                          color={color}
-                        />
-                      );
-                    case "Movies":
-                      return <Ionicons name="film" size={size} color={color} />;
-                    case "Tourism":
-                      return (
-                        <Ionicons name="airplane" size={size} color={color} />
-                      );
-                    default:
-                      return null;
-                  }
-                },
-                tabBarActiveTintColor: "#4A90E2",
-                tabBarInactiveTintColor: "gray",
-              })}
-            >
-              <Tab.Screen
-                name="HomeTab"
-                component={HomeScreen}
-                options={{
-                  title: "Profile",
-                  tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="person" size={size} color={color} />
-                  ),
-                }}
-              />
-              <Tab.Screen
-                name="Social"
-                component={SocialScreen}
-                options={{ title: "Social" }}
-              />
-              <Tab.Screen
-                name="MarketplaceScreen"
-                component={MarketplaceScreen}
-                options={{
-                  title: "Marketplace",
-                  tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="storefront" size={size} color={color} />
-                  ),
-                }}
-              />
-
-              <Tab.Screen
-                name="Movies"
-                component={MovieScreen}
-                options={{ title: "Movies" }}
-              />
-              <Tab.Screen
-                name="Tourism"
-                component={TourismScreen}
-                options={{ title: "Tourism" }}
-              />
-
-              <Tab.Screen
-                name="Games"
-                component={GameScreen}
-                options={{ title: "Games" }}
-              />
-              <Tab.Screen
-                name="Health"
-                component={HealthScreen}
-                options={{
-                  title: "Health",
-                  tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="fitness" size={size} color={color} />
-                  ),
-                }}
-              />
-            </Tab.Navigator>
-          )}
-        </Stack.Screen>
+        <Stack.Screen
+          name="Home"
+          component={TabNavigator}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+// Main App Component
+// Update your App.js to include the new screens
+
 export default App;
