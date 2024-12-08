@@ -1,6 +1,7 @@
 // Styles
 import { StyleSheet, Dimensions } from "react-native";
 const styles = StyleSheet.create({
+  //homescreen
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
@@ -159,6 +160,62 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
     marginTop: 2,
+  },
+  // New styles for header icons
+  headerWithIcons: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "#f8f8f8",
+  },
+  zencoinContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  zencoinText: {
+    marginLeft: 5,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  luckyDrawIcon: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: "#f0f0f0",
+  },
+
+  // Lucky Draw Modal Styles
+  luckyDrawModalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  luckyDrawModalContent: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    width: "80%",
+    alignItems: "center",
+  },
+  luckyDrawOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  luckyDrawOptionText: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: "#333",
   },
   // Movie Screen Styles
   movieListContainer: {
