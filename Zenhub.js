@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Modal,
   View,
   Text,
   StyleSheet,
@@ -93,11 +94,68 @@ const HomeScreen = () => {
     achievementCount: 24,
     followersCount: 842,
     followingCount: 391,
+    zencoins: 1250,
   });
+
+  const [isLuckyDrawModalVisible, setIsLuckyDrawModalVisible] = useState(false);
+
+  const handleLuckyDrawPress = () => {
+    setIsLuckyDrawModalVisible(true);
+  };
+
+  const renderLuckyDrawModal = () => {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isLuckyDrawModalVisible}
+        onRequestClose={() => setIsLuckyDrawModalVisible(false)}
+      >
+        <View style={styles.luckyDrawModalContainer}>
+          <View style={styles.luckyDrawModalContent}>
+            <TouchableOpacity
+              style={styles.luckyDrawOption}
+              onPress={() => {
+                // Logic for buying with ZenCoins
+                setIsLuckyDrawModalVisible(false);
+              }}
+            >
+              <MaterialCommunityIcons name="coin" size={24} color="#FFD700" />
+              <Text style={styles.luckyDrawOptionText}>Buy with ZenCoins</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.luckyDrawOption}
+              onPress={() => {
+                // Logic for buying with money
+                setIsLuckyDrawModalVisible(false);
+              }}
+            >
+              <Ionicons name="card" size={24} color="#4A90E2" />
+              <Text style={styles.luckyDrawOptionText}>Buy with Money</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      {/* Header with ZenCoins and Lucky Draw */}
+      <View style={styles.headerWithIcons}>
+        <TouchableOpacity style={styles.zencoinContainer}>
+          <MaterialCommunityIcons name="coin" size={20} color="#FFD700" />
+          <Text style={styles.zencoinText}>{userStats.zencoins}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.luckyDrawIcon}
+          onPress={handleLuckyDrawPress}
+        >
+          <MaterialCommunityIcons name="gift" size={24} color="#4A90E2" />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {/* Profile Header */}
         <View style={styles.profileHeader}>
           <Image
@@ -197,7 +255,16 @@ const HomeScreen = () => {
             </View>
           ))}
         </View>
+
+        {/* Placeholder for additional content */}
+        <View style={styles.placeholderContent}>
+          <Text style={styles.placeholderText}>
+            More content coming soon...
+          </Text>
+        </View>
       </ScrollView>
+
+      {renderLuckyDrawModal()}
     </SafeAreaView>
   );
 };
