@@ -35,6 +35,7 @@ import GamesScreen from "./GamesScreen";
 import SocialScreen from "./SocialScreen";
 import TourismScreen from "./TourismScreen";
 import HealthScreen from "./HealthScreen";
+import ProfileScreen from "./ProfileScreen";
 // In your React Native component
 
 // Authentication Screen
@@ -89,7 +90,8 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 //HomeScreen
-const HomeScreen = () => {
+// In the HomeScreen component, modify the header section
+const HomeScreen = ({ navigation }) => {
   const [userStats] = useState({
     totalActivities: 156,
     achievementCount: 24,
@@ -142,20 +144,32 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header with ZenCoins and Lucky Draw */}
+      {/* Modified Header with Profile Icon and ZenCoins */}
       <View style={styles.headerWithIcons}>
-        <TouchableOpacity style={styles.zencoinContainer}>
-          <MaterialCommunityIcons name="coin" size={20} color="#FFD700" />
-          <Text style={styles.zencoinText}>{userStats.zencoins}</Text>
-        </TouchableOpacity>
         <TouchableOpacity
-          style={styles.luckyDrawIcon}
-          onPress={handleLuckyDrawPress}
+          style={styles.profileIconContainer}
+          onPress={() => navigation.navigate("Profile")}
         >
-          <MaterialCommunityIcons name="gift" size={24} color="#4A90E2" />
+          <Image
+            source={{ uri: "https://via.placeholder.com/120" }}
+            style={styles.headerProfileIcon}
+          />
         </TouchableOpacity>
+        <View style={styles.headerRightIcons}>
+          <TouchableOpacity style={styles.zencoinContainer}>
+            <MaterialCommunityIcons name="coin" size={20} color="#FFD700" />
+            <Text style={styles.zencoinText}>{userStats.zencoins}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.luckyDrawIcon}
+            onPress={handleLuckyDrawPress}
+          >
+            <MaterialCommunityIcons name="gift" size={24} color="#4A90E2" />
+          </TouchableOpacity>
+        </View>
       </View>
 
+      {/* Rest of the HomeScreen remains the same */}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {/* Profile Header */}
         <View style={styles.profileHeader}>
@@ -263,6 +277,7 @@ const HomeScreen = () => {
             More content coming soon...
           </Text>
         </View>
+        {/* Existing content */}
       </ScrollView>
 
       {renderLuckyDrawModal()}
@@ -321,6 +336,7 @@ const TabNavigator = () => {
           ),
         }}
       />
+
       <Tab.Screen
         name="Social"
         component={SocialScreen}
@@ -377,6 +393,11 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={TabNavigator}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
