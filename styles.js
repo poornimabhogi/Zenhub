@@ -1,5 +1,5 @@
 // Styles
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, width } from "react-native";
 const styles = StyleSheet.create({
   //homescreen
   container: {
@@ -919,6 +919,496 @@ const styles = StyleSheet.create({
     color: "#4A90E2",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  profileModalContent: {
+    width: "90%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  createPostModalContent: {
+    width: "95%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+  },
+  mediaGridModalContent: {
+    width: "95%",
+    height: "90%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+  },
+  modalCloseButton: {
+    alignSelf: "flex-end",
+    marginBottom: 10,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+
+  // Profile Edit Styles
+  profileAvatarEdit: {
+    position: "relative",
+    marginBottom: 20,
+  },
+  profileAvatarEditImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+  },
+  editAvatarOverlay: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: 20,
+    padding: 5,
+  },
+  profileEditInput: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 15,
+  },
+  updateProfileButton: {
+    backgroundColor: "#4A90E2",
+    padding: 15,
+    borderRadius: 5,
+    width: "100%",
+    alignItems: "center",
+  },
+  updateProfileButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+  // Create Post Styles
+  postTextInput: {
+    height: 100,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 15,
+  },
+  mediaUploadOptions: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 15,
+  },
+  mediaUploadButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "#F0F0F0",
+    borderRadius: 5,
+  },
+  selectedMediaItem: {
+    position: "relative",
+    marginRight: 10,
+  },
+  selectedMediaImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 5,
+  },
+  removeMediaButton: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: 15,
+    padding: 2,
+  },
+  postButton: {
+    backgroundColor: "#4A90E2",
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 15,
+  },
+  postButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+  // Media Grid Styles
+  mediaGridItem: {
+    width: "30%",
+    margin: 5,
+    aspectRatio: 1,
+    borderRadius: 5,
+  },
+  addMediaButton: {
+    width: "30%",
+    margin: 5,
+    aspectRatio: 1,
+    borderWidth: 1,
+    borderColor: "#4A90E2",
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  // Social Feed Styles
+  socialFeedContainer: {
+    padding: 10,
+  },
+  createPostSection: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  createPostInput: {
+    backgroundColor: "#F0F0F0",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  createPostPlaceholder: {
+    color: "#888",
+  },
+  mediaUploadSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  mediaUploadSmallButton: {
+    backgroundColor: "#F0F0F0",
+    borderRadius: 5,
+    padding: 10,
+  },
+  addMediaGridButton: {
+    backgroundColor: "#4A90E2",
+    borderRadius: 25,
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  postContainer: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  postText: {
+    marginBottom: 10,
+  },
+  postImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  profileScreenHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    backgroundColor: "white",
+  },
+  profileScreenTitle: {
+    marginLeft: 15,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  editProfileIconOverlay: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: 15,
+    padding: 5,
+  },
+  statusContainer: {
+    padding: 15,
+    backgroundColor: "white",
+  },
+  statusInput: {
+    minHeight: 100,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+  },
+  mediaUploadContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  postButton: {
+    backgroundColor: "#4A90E2",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  postButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  mediaPreviewContainer: {
+    paddingVertical: 10,
+  },
+  mediaPreviewItem: {
+    position: "relative",
+    marginRight: 10,
+  },
+  mediaPreviewImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+  },
+  removeMediaButton: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: 15,
+    padding: 2,
+  },
+  postsContainer: {
+    padding: 15,
+  },
+  postItem: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+  },
+  postHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  postProfileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  postUsername: {
+    fontWeight: "bold",
+  },
+  postTimestamp: {
+    color: "gray",
+    fontSize: 12,
+  },
+  postStatus: {
+    marginBottom: 10,
+  },
+  postMediaContainer: {
+    marginTop: 10,
+  },
+  postMediaImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  mediaModalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  mediaModalContent: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    width: "80%",
+  },
+  mediaModalOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+  },
+  mediaModalOptionText: {
+    marginLeft: 15,
+    fontSize: 16,
+  },
+  headerWithIcons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 15,
+    backgroundColor: "white",
+  },
+  // Header Styles
+  headerRightIcons: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  headerProfileIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#4A90E2",
+  },
+  profileIconContainer: {
+    padding: 5,
+  },
+
+  // Media Modal Styles
+  mediaModalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  mediaModalContent: {
+    backgroundColor: "white",
+    borderRadius: 15,
+    width: "80%",
+    padding: 20,
+  },
+  mediaModalOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+  },
+  mediaModalOptionText: {
+    marginLeft: 15,
+    fontSize: 16,
+    color: "#4A90E2",
+  },
+
+  // Additional Profile Screen Enhancements
+  profileBioContainer: {
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  profileBioEditIcon: {
+    position: "absolute",
+    right: -25,
+    top: 0,
+  },
+
+  // Responsive Media Upload Styles
+  mediaUploadGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    marginTop: 10,
+  },
+  mediaUploadGridItem: {
+    width: (width - 45) / 3, // 3 columns with spacing
+    height: (width - 45) / 3,
+    marginBottom: 15,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  mediaUploadGridImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  mediaUploadGridAddButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F0F0F0",
+  },
+
+  // Enhanced Post Styles
+  postContainer: {
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 15,
+    marginVertical: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  postHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  postProfileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  postUserInfo: {
+    flex: 1,
+  },
+  postUsername: {
+    fontWeight: "700",
+    fontSize: 16,
+  },
+  postTimestamp: {
+    color: "#888",
+    fontSize: 12,
+  },
+  postActionButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  postActionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  postActionButtonText: {
+    marginLeft: 5,
+    color: "#4A90E2",
+  },
+
+  // Floating Action Button
+  floatingAddButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#4A90E2",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+  // Responsive Containers
+  responsiveContainer: {
+    flex: 1,
+    paddingHorizontal: 15,
   },
 });
 export default styles;
