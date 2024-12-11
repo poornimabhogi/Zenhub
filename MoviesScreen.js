@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import styles from "./styles";
 
 import {
   SafeAreaView,
@@ -10,6 +9,7 @@ import {
   View,
   Alert,
 } from "react-native";
+import styles from "./styles";
 const MoviesScreen = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
