@@ -5,8 +5,8 @@ import {
   GestureDetector,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
-import styles from "./styles";
 import React from "react";
+import styles from "./styles";
 const GamesScreen = ({ navigation }) => {
   const [board, setBoard] = useState(
     Array(4)
