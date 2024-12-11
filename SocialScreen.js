@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
@@ -13,6 +12,7 @@ import {
   Platform,
 } from "react-native";
 import styles from "./styles";
+
 import {
   Ionicons,
   MaterialCommunityIcons,
