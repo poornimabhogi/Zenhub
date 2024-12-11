@@ -28,26 +28,81 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { FlatList, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
-import styles from "./styles";
-import MarketplaceScreen from "./MarketplaceScreen";
-import MoviesScreen from "./MoviesScreen";
-import GamesScreen from "./GamesScreen";
-import SocialScreen from "./SocialScreen";
-import TourismScreen from "./TourismScreen";
-import HealthScreen from "./HealthScreen";
-import ProfileScreen from "./ProfileScreen";
+import styles from "./src/components/screens/styles";
+import MarketplaceScreen from "./src/components/screens/MarketplaceScreen";
+import MoviesScreen from "./src/components/screens/MoviesScreen";
+import GamesScreen from "./src/components/screens/GamesScreen";
+import SocialScreen from "./src/components/screens/SocialScreen";
+import TourismScreen from "./src/components/screens/TourismScreen";
+import HealthScreen from "./src/components/screens/HealthScreen";
+import ProfileScreen from "./src/components/screens/ProfileScreen";
 // In your React Native component
 
 // Authentication Screen
+
+import { CheckBox } from "react-native-elements";
+import axios from "axios";
+import api from "./src/services/api";
+
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [emailError, setEmailError] = useState("");
 
-  const handleLogin = () => {
-    if (email && password) {
-      navigation.navigate("Home");
+  // Email validation function
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  // Handle email input and validation
+  const handleEmailChange = (text) => {
+    setEmail(text);
+    if (text && !validateEmail(text)) {
+      setEmailError("Please enter a valid email address");
     } else {
-      alert("Please enter email and password");
+      setEmailError("");
+    }
+  };
+
+  // Handle login
+  const handleLogin = async () => {
+    // Validate email before submission
+    if (!validateEmail(email)) {
+      Alert.alert("Invalid Email", "Please enter a valid email address");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://your-backend-url/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
+
+      // Store token and user info (you might want to use AsyncStorage)
+      // navigation.navigate('Home', { user: response.data.user });
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(
+        "Login Failed",
+        error.response?.data?.message || "An error occurred"
+      );
+    }
+  };
+
+  // Handle guest login
+  const handleGuestLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://your-backend-url/api/auth/guest-login"
+      );
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert("Guest Login Failed", "Unable to create guest session");
     }
   };
 
@@ -59,14 +114,21 @@ const LoginScreen = ({ navigation }) => {
       >
         <View style={styles.loginContent}>
           <Text style={styles.loginTitle}>ZenHub Wellness</Text>
+
+          {/* Email Input */}
           <TextInput
-            style={styles.loginInput}
+            style={[styles.loginInput, emailError ? styles.errorInput : {}]}
             placeholder="Email"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={handleEmailChange}
             keyboardType="email-address"
             autoCapitalize="none"
           />
+          {emailError ? (
+            <Text style={styles.errorText}>{emailError}</Text>
+          ) : null}
+
+          {/* Password Input */}
           <TextInput
             style={styles.loginInput}
             placeholder="Password"
@@ -75,12 +137,30 @@ const LoginScreen = ({ navigation }) => {
             secureTextEntry
             autoCapitalize="none"
           />
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+
+          {/* Remember Me Checkbox */}
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              title="Remember Me"
+              checked={rememberMe}
+              onPress={() => setRememberMe(!rememberMe)}
+              containerStyle={styles.checkbox}
+            />
+          </View>
+
+          {/* Login Button */}
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={handleLogin}
+            disabled={!email || !password || !!emailError}
+          >
             <Text style={styles.loginButtonText}>Login</Text>
           </TouchableOpacity>
+
+          {/* Guest Login */}
           <TouchableOpacity
             style={styles.guestButton}
-            onPress={() => navigation.navigate("Home")}
+            onPress={handleGuestLogin}
           >
             <Text style={styles.guestButtonText}>Continue as Guest</Text>
           </TouchableOpacity>
@@ -89,6 +169,7 @@ const LoginScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
 //HomeScreen
 // In the HomeScreen component, modify the header section
 const HomeScreen = ({ navigation }) => {
@@ -304,6 +385,7 @@ const HomeScreen = ({ navigation }) => {
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// Bottom Tab Navigator
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -319,11 +401,16 @@ const TabNavigator = () => {
             Health: "fitness",
           };
           return (
-            <Ionicons name={icons[route.name]} size={size} color={color} />
+            <Ionicons
+              name={icons[route.name] || "help"}
+              size={size}
+              color={color}
+            />
           );
         },
         tabBarActiveTintColor: "#4A90E2",
         tabBarInactiveTintColor: "gray",
+        headerShown: false,
       })}
     >
       <Tab.Screen
@@ -336,7 +423,6 @@ const TabNavigator = () => {
           ),
         }}
       />
-
       <Tab.Screen
         name="Social"
         component={SocialScreen}
@@ -381,29 +467,24 @@ const TabNavigator = () => {
   );
 };
 
+// Main App Navigator
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={TabNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{ headerShown: false }}
-        />
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={TabNavigator} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
 // Main App Component
 // Update your App.js to include the new screens
 
